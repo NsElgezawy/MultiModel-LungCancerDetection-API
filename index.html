@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OncoAI • AI-Powered Cancer Detection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --white: #ffffff;
+      --light: #f8fafc;
+      --blue-50: #f0f7ff;
+      --blue-100: #e0f2fe;
+      --blue-500: #0ea5e9;
+      --blue-600: #0284c7;
+      --teal-500: #14b8a6;
+      --teal-600: #0d9488;
+      --gray-200: #e2e8f0;
+      --gray-400: #94a3b8;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--light);
+      color: var(--gray-800);
+      line-height: 1.6;
+    }
+    header {
+      padding: 1.5rem 2rem;
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--teal-600);
+    }
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--blue-50) 0%, #ecfeff 100%);
+      padding: 2rem;
+    }
+    .hero-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 4rem 3rem;
+      width: 100%;
+      max-width: 680px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--blue-600), var(--teal-600));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      font-size: 1.125rem;
+      color: var(--gray-600);
+      margin-bottom: 3rem;
+    }
+    .upload-area {
+      border: 3px dashed var(--blue-500);
+      border-radius: var(--radius);
+      padding: 4rem 2rem;
+      background: var(--blue-50);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .upload-area:hover {
+      background: var,var(--blue-100);
+      border-color: var(--blue-600);
+    }
+    .upload-area.dragover {
+      background: var(--blue-100);
+      border-color: var(--teal-600);
+      transform: scale(1.02);
+    }
+    .upload-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1.5rem;
+      color: var(--teal-600);
+    }
+    .upload-text {
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: var(--gray-800);
+    }
+    .file-input {
+      display: none;
+    }
+    .btn-primary {
+      background: var(--teal-600);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--teal-500);
+      transform: translateY(-2px);
+    }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .preview-item {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      aspect-ratio: 1;
+      position: relative;
+    }
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .remove-preview {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+    }
+
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .process {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+    .step {
+      text-align: center;
+    }
+    .step-number {
+      width: 64px;
+      height: 64px;
+      background: var(--teal-600);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 auto 1.5rem;
+    }
+    .step h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--gray-800);
+    }
+    footer {
+      background: var(--gray-800);
+      color: var(--gray-400);
+      text-align: center;
+      padding: 3rem 2rem;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .hero-card { padding: 3rem 2rem; }
+      h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">OncoAI</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <h1>Upload Medical Image for AI Cancer Analysis</h1>
+      <p class="subtitle">Instant AI-powered detection of lung, breast, prostate, and skin cancers from CT, MRI, X-ray, mammogram, or dermoscopy images.</p>
+
+      <div class="upload-area" id="dropZone">
+        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+        </svg>
+        <div class="upload-text">Drag & drop medical images here</div>
+        <p style="color:var(--gray-600); margin-bottom:1.5rem;">or</p>
+        <input type="file" id="fileInput" class="file-input" accept="image/*,.dcm" multiple />
+        <label for="fileInput" class="btn-primary">Choose File</label>
+      </div>
+
+      <div id="previewContainer" class="preview-grid" style="display:none;"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 style="text-align:center; font-size:2.5rem; margin-bottom:1rem;">How It Works</h2>
+    <p style="text-align:center; color:var(--gray-600); max-width:700px; margin:0 auto 4rem;">
+      Our clinically-validated deep learning models analyze your medical images in seconds.
+    </p>
+
+    <div class="process">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Upload Image</h3>
+        <p>Drag & drop DICOM or standard medical images (CT, MRI, X-ray, etc.)</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>AI Analysis</h3>
+        <p>Multi-modal neural networks detect and localize potential malignancies</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Get Results</h3>
+        <p>Receive probability scores, heatmaps, and structured radiology report</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 OncoAI • For research and clinical decision support only • Not a substitute for professional medical diagnosis</p>
+  </footer>
+
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+      dropZone.addEventListener(event, e => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
+
+    ['dragenter', 'dragover'].forEach(event => {
+      dropZone.addEventListener(event, () => dropZone.classList.add('dragover'));
+    });
+
+    ['dragleave', 'drop'].forEach(event => {
+      dropZone.addEventListener(event, () => dropZone.classList.remove('dragover'));
+    });
+
+    dropZone.addEventListener('drop', e => {
+      const files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+      previewContainer.style.display = 'grid';
+      previewContainer.innerHTML = '';
+      [...files].forEach(file => {
+        if (file.type.startsWith('image/') || file.name.endsWith('.dcm')) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            const div = document.createElement('div');
+            div.className = 'preview-item';
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            const btn = document.createElement('button');
+            btn.innerHTML = '×';
+            btn.className = 'remove-preview';
+            btn.onclick = () => div.remove();
+            div.appendChild(img);
+            div.appendChild(btn);
+            previewContainer.appendChild(div);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
