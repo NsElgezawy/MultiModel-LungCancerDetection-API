@@ -9,7 +9,7 @@ from PIL import Image
 
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # ديركتوري الحالي
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
 CNN_PATH = os.path.join(BASE_DIR, "models", "cnn.pth")
 VGG_PATH = os.path.join(BASE_DIR, "models", "vgg.pth")
 RESNET_PATH = os.path.join(BASE_DIR, "models", "resnet_feature_extraction_checkpoint.pth")
@@ -170,3 +170,4 @@ def predict(model_name, images):
     prediction = CLASS_NAMES[pred.item()]
     confidence = round(conf.item()*100,2)
     return prediction, confidence
+
