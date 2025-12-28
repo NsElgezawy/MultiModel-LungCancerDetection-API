@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -282,6 +283,8 @@
     </div>
 
     <div id="previewContainer" class="preview-grid"></div>
+    
+
 
     <div class="button-group" id="modelButtons">
       <button class="btn btn-vgg" data-model="vgg16" disabled>VGG_16</button>
@@ -290,6 +293,8 @@
       <button class="btn btn-cnn" data-model="cnn" disabled>CNN</button>
       <button class="btn btn-ensemble" data-model="ensemble" disabled>Ensemble</button>
       <button class="btn btn-gradcam" data-model="gradcam" disabled>Grad-CAM</button>
+      <div id="resultBox" style="margin-top:20px; font-weight:600;"></div>
+
     </div>
 
   </div>
@@ -365,29 +370,57 @@
   }
 
   /* ===== ACTION FUNCTIONS ===== */
-  function runModel(model) {
-    alert("Running model: " + model.toUpperCase());
+  async function runModel(model) {
+  const files = fileInput.files;
+  if (!files.length) {
+    alert("No images selected!");
+    return;
   }
 
-  function runGradCam() {
-    alert("Generating Grad-CAM visualization...");
+  const formData = new FormData();
+  formData.append("model_name", model);
+
+  for (const file of files) {
+    formData.append("images", file);
   }
 
-  /* Button actions */
-  buttons.forEach(btn => {
+  try {
+    const response = await fetch("/predict", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+    const box = document.getElementById("resultBox");
+
+    box.innerHTML = `
+      <p>🧠 <b>Model:</b> ${model.toUpperCase()}</p>
+      <p>📊 <b>Prediction:</b> ${data.prediction}</p>
+      <p>📈 <b>Confidence:</b> ${data.confidence}%</p>
+    `;
+
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+}
+ 
+function runGradCam() {
+  alert("Generating Grad-CAM visualization...");
+}
+
+
+
+/* Button actions */
+buttons.forEach(btn => {
     btn.addEventListener('click', () => {
-      if (btn.disabled) return;
+        if (btn.disabled) return;
 
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-      const model = btn.dataset.model;
-
-      if (model === 'gradcam') {
-        runGradCam();
-      } else {
+        const model = btn.dataset.model;
         runModel(model);
-      }
+      
     });
   });
 </script>
